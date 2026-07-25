@@ -17,7 +17,9 @@
 
   --text-primary: #f0e6ff;
   --text-secondary: #b8a5d4;
-  --text-muted: #7a6899;
+  /* #7a6899 daba 4.2:1 sobre el fondo y 3.7:1 sobre las cards: por debajo
+     de WCAG AA (4.5:1). #9a86bd da 5.6-6.4:1 y sigue leyendose apagado. */
+  --text-muted: #9a86bd;
 
   --gradient-love: linear-gradient(135deg, #ff6b9d 0%, #c44dff 100%);
   --gradient-warm: linear-gradient(135deg, #f5c542 0%, #ff6b9d 100%);
@@ -178,10 +180,16 @@ body {
   height: 40px;
   border-radius: 50%;
   text-decoration: none;
-  font-size: 1.25rem;
-  color: var(--text-muted);
+  font-size: 1.3rem;
+  /* Los iconos son trazo fino: con text-muted casi no se distinguian
+     del vidrio de la nav. */
+  color: var(--text-secondary);
   transition: var(--transition);
   position: relative;
+}
+
+.nav-link .icon {
+  stroke-width: 1.9;
 }
 
 .nav-link:hover {
@@ -384,9 +392,16 @@ section {
 }
 
 /* ---------- Scroll Hint ---------- */
+.scroll-hint.is-hidden {
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .scroll-hint {
   position: absolute;
   bottom: 30px;
+  transition: opacity 0.4s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -615,11 +630,12 @@ section {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: rgba(0, 0, 0, 0.4);
+  /* Sobre fotos claras el fondo al 40% y el borde al 8% se perdian. */
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(10, 4, 20, 0.55);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  color: var(--text-primary);
+  color: #ffffff;
   font-size: 1.4rem;
   cursor: pointer;
   transition: var(--transition);
@@ -630,8 +646,13 @@ section {
   padding: 0;
 }
 
+.carousel-btn .icon {
+  stroke-width: 2.2;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+}
+
 .carousel-btn:hover {
-  background: rgba(255, 107, 157, 0.3);
+  background: rgba(255, 107, 157, 0.45);
   border-color: var(--accent-pink);
   transform: translateY(-50%) scale(1.1);
 }
@@ -644,22 +665,31 @@ section {
   right: 12px;
 }
 
+/* Los dots iban sueltos sobre la foto: en las zonas claras (cielo, ropa
+   blanca) desaparecian. Ahora van sobre una pastilla oscura. */
 .carousel-dots {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 9px;
   z-index: 2;
+  padding: 7px 11px;
+  border-radius: var(--radius-full);
+  background: rgba(10, 4, 20, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
   transition: var(--transition);
   padding: 0;
@@ -667,13 +697,12 @@ section {
 
 .dot.active {
   background: var(--accent-pink);
-  border-color: var(--accent-pink);
   box-shadow: 0 0 10px var(--accent-pink);
-  transform: scale(1.2);
+  transform: scale(1.35);
 }
 
 .dot:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 /* ---------- Interactive Heart Game ---------- */
@@ -773,6 +802,10 @@ section {
 }
 
 .heart-icon {
+  /* En em quedaba un corazon chico perdido en el centro de una caja
+     grande: ahora escala con el tamano del boton. */
+  width: 52%;
+  height: auto;
   color: var(--hc, var(--accent-pink));
   transition: transform 0.3s ease, filter 0.3s ease;
   filter: drop-shadow(0 2px 10px color-mix(in srgb, var(--hc, var(--accent-pink)) 45%, transparent));
@@ -1046,6 +1079,24 @@ section {
 
   section {
     padding: 80px 16px;
+  }
+
+  /* En mobile la nav es una barra flotante abajo: sin este espacio
+     tapaba el hint de scroll, la ultima fila de corazones y el footer. */
+  .scroll-hint {
+    bottom: 96px;
+  }
+
+  #hero {
+    padding-bottom: 120px;
+  }
+
+  #game {
+    padding-bottom: 110px;
+  }
+
+  #footer {
+    padding-bottom: 96px;
   }
 }
 

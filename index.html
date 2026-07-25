@@ -32,20 +32,24 @@
        ====================================================== -->
   <svg id="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0">
     <defs>
+      <!-- Path base del corazón: lo reusan los 3 símbolos de abajo -->
+      <path id="p-heart" d="M12 21S3.5 15.6 3.5 9.9C3.5 6.9 5.9 4.5 8.8 4.5c1.6 0 2.6.8 3.2 1.7.6-.9 1.6-1.7 3.2-1.7 2.9 0 5.3 2.4 5.3 5.4C20.5 15.6 12 21 12 21Z"/>
+
       <!-- Corazón (contorno) -->
       <symbol id="i-heart" viewBox="0 0 24 24">
-        <path d="M12 20.6S3.9 15.4 3.9 9.9C3.9 7 6.1 4.8 8.8 4.8c1.5 0 2.6.7 3.2 1.7.6-1 1.7-1.7 3.2-1.7 2.7 0 4.9 2.2 4.9 5.1 0 5.5-8.1 10.7-8.1 10.7Z"/>
+        <use href="#p-heart"></use>
       </symbol>
 
       <!-- Corazón (relleno) -->
       <symbol id="i-heart-solid" viewBox="0 0 24 24">
-        <path fill="currentColor" stroke="none" d="M12 21S3.5 15.6 3.5 9.9C3.5 6.9 5.9 4.5 8.8 4.5c1.6 0 2.6.8 3.2 1.7.6-.9 1.6-1.7 3.2-1.7 2.9 0 5.3 2.4 5.3 5.4C20.5 15.6 12 21 12 21Z"/>
+        <use href="#p-heart" fill="currentColor" stroke="none"></use>
       </symbol>
 
-      <!-- Corazones dobles -->
+      <!-- Corazones dobles: uno relleno y uno de contorno, sin superponerse
+           (superpuestos y semitransparentes se leían como una mancha) -->
       <symbol id="i-hearts" viewBox="0 0 24 24">
-        <path fill="currentColor" stroke="none" d="M9 18.4S2.6 14.3 2.6 9.9c0-2.4 1.9-4.3 4.2-4.3 1.3 0 2.1.6 2.6 1.4.5-.8 1.3-1.4 2.6-1.4 2.3 0 4.2 1.9 4.2 4.3 0 4.4-6.4 8.5-6.4 8.5Z" opacity=".55"/>
-        <path fill="currentColor" stroke="none" d="M16 21s-6.4-4.1-6.4-8.5c0-2.4 1.9-4.3 4.2-4.3 1.3 0 2.1.6 2.6 1.4.5-.8 1.3-1.4 2.6-1.4 2.3 0 4.2 1.9 4.2 4.3C22.4 16.9 16 21 16 21Z"/>
+        <use href="#p-heart" transform="translate(0.9 0.6) scale(0.44)" stroke-width="3.9"></use>
+        <use href="#p-heart" transform="translate(7 5.6) scale(0.72)" fill="currentColor" stroke="none"></use>
       </symbol>
 
       <!-- Casa -->
@@ -72,10 +76,10 @@
         <path d="M21 15.6l-4.6-4.3-8.8 8.2"/>
       </symbol>
 
-      <!-- Destello -->
+      <!-- Destello: una sola estrella centrada y simétrica. La versión con
+           un destello chico al costado se veía como dos puntos sueltos. -->
       <symbol id="i-sparkle" viewBox="0 0 24 24">
-        <path d="M10.4 3.2l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4L4.4 9.2l4.4-1.6Z"/>
-        <path d="M18 14.6l.75 2 2 .75-2 .75-.75 2-.75-2-2-.75 2-.75Z"/>
+        <path d="M12 3.4l2.1 6.5 6.5 2.1-6.5 2.1-2.1 6.5-2.1-6.5L3.4 12l6.5-2.1Z"/>
       </symbol>
 
       <!-- Reloj -->
@@ -84,10 +88,11 @@
         <path d="M12 7.4V12l3.4 2"/>
       </symbol>
 
-      <!-- Fuegos artificiales -->
+      <!-- Fuegos artificiales: centro chico y rayos largos, si no se lee
+           como un sol o un asterisco -->
       <symbol id="i-firework" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="2.6"/>
-        <path d="M12 2.4v3.2M12 18.4v3.2M2.4 12h3.2M18.4 12h3.2M5.2 5.2l2.3 2.3M16.5 16.5l2.3 2.3M18.8 5.2l-2.3 2.3M7.5 16.5l-2.3 2.3"/>
+        <circle cx="12" cy="12" r="1.7"/>
+        <path d="M12 1.8v4.4M12 17.8v4.4M1.8 12h4.4M17.8 12h4.4M4.3 4.3l3.1 3.1M16.6 16.6l3.1 3.1M19.7 4.3l-3.1 3.1M7.4 16.6l-3.1 3.1"/>
       </symbol>
 
       <!-- Luna -->
@@ -96,10 +101,13 @@
         <path d="M17.6 4.2l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6Z"/>
       </symbol>
 
-      <!-- Sol -->
-      <symbol id="i-sun" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="4.2"/>
-        <path d="M12 2.8v2.2M12 19v2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M2.8 12H5M19 12h2.2M4.5 19.5l1.6-1.6M17.9 6.1l1.6-1.6"/>
+      <!-- Calendario con corazón (un día cualquiera juntos).
+           Antes era un sol, pero a 40px se confundía con los fuegos
+           artificiales de otro hito. -->
+      <symbol id="i-calendar-heart" viewBox="0 0 24 24">
+        <path d="M3.8 7a1.8 1.8 0 0 1 1.8-1.8h12.8A1.8 1.8 0 0 1 20.2 7v11.6a1.8 1.8 0 0 1-1.8 1.8H5.6a1.8 1.8 0 0 1-1.8-1.8Z"/>
+        <path d="M8.2 3.1v3.6M15.8 3.1v3.6M3.8 10.3h16.4"/>
+        <use href="#p-heart" transform="translate(7.2 9.9) scale(0.4)" fill="currentColor" stroke="none"></use>
       </symbol>
 
       <!-- Avión de papel (viaje) -->
@@ -277,7 +285,7 @@
 
       <div class="timeline-item reveal" data-side="right">
         <span class="timeline-dot">
-          <svg class="icon" aria-hidden="true"><use href="#i-sun"></use></svg>
+          <svg class="icon" aria-hidden="true"><use href="#i-calendar-heart"></use></svg>
         </span>
         <div class="timeline-card">
           <span class="timeline-date">27 de julio, 2025</span>
