@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeartGame();
   initScrollReveal();
   initNavHighlight();
+  initScrollHint();
 });
 
 /* ========================================
@@ -363,4 +364,22 @@ function initNavHighlight() {
   });
 
   sections.forEach((s) => observer.observe(s));
+}
+
+
+/* ========================================
+   SCROLL HINT
+   Se esconde al bajar: en mobile la nav flotante queda justo encima
+   y los dos elementos se pisaban.
+   ======================================== */
+function initScrollHint() {
+  const hint = document.querySelector('.scroll-hint');
+  if (!hint) return;
+
+  // Se usa una clase, no style.opacity: las animaciones CSS ganan sobre
+  // los estilos inline y el fade-in de entrada anularia el fade-out.
+  const update = () => hint.classList.toggle('is-hidden', window.scrollY > 60);
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
 }
