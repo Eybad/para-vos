@@ -3,15 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Vos ❤️</title>
+  <title>Para Vos</title>
   <meta name="description" content="Una página especial para la persona más importante de mi vida">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff6b9d' d='M12 21S3.5 15.6 3.5 9.9C3.5 6.9 5.9 4.5 8.8 4.5c1.6 0 2.6.8 3.2 1.7.6-.9 1.6-1.7 3.2-1.7 2.9 0 5.3 2.4 5.3 5.4C20.5 15.6 12 21 12 21Z'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- ===================== ICON SPRITE =====================
+       Íconos SVG propios, line-style, 24x24. Se usan con:
+       <svg class="icon"><use href="#i-nombre"></use></svg>
+       ====================================================== -->
+  <svg id="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <!-- Corazón (contorno) -->
+      <symbol id="i-heart" viewBox="0 0 24 24">
+        <path d="M12 20.6S3.9 15.4 3.9 9.9C3.9 7 6.1 4.8 8.8 4.8c1.5 0 2.6.7 3.2 1.7.6-1 1.7-1.7 3.2-1.7 2.7 0 4.9 2.2 4.9 5.1 0 5.5-8.1 10.7-8.1 10.7Z"/>
+      </symbol>
+
+      <!-- Corazón (relleno) -->
+      <symbol id="i-heart-solid" viewBox="0 0 24 24">
+        <path fill="currentColor" stroke="none" d="M12 21S3.5 15.6 3.5 9.9C3.5 6.9 5.9 4.5 8.8 4.5c1.6 0 2.6.8 3.2 1.7.6-.9 1.6-1.7 3.2-1.7 2.9 0 5.3 2.4 5.3 5.4C20.5 15.6 12 21 12 21Z"/>
+      </symbol>
+
+      <!-- Corazones dobles -->
+      <symbol id="i-hearts" viewBox="0 0 24 24">
+        <path fill="currentColor" stroke="none" d="M9 18.4S2.6 14.3 2.6 9.9c0-2.4 1.9-4.3 4.2-4.3 1.3 0 2.1.6 2.6 1.4.5-.8 1.3-1.4 2.6-1.4 2.3 0 4.2 1.9 4.2 4.3 0 4.4-6.4 8.5-6.4 8.5Z" opacity=".55"/>
+        <path fill="currentColor" stroke="none" d="M16 21s-6.4-4.1-6.4-8.5c0-2.4 1.9-4.3 4.2-4.3 1.3 0 2.1.6 2.6 1.4.5-.8 1.3-1.4 2.6-1.4 2.3 0 4.2 1.9 4.2 4.3C22.4 16.9 16 21 16 21Z"/>
+      </symbol>
+
+      <!-- Casa -->
+      <symbol id="i-home" viewBox="0 0 24 24">
+        <path d="M3.6 10.6 12 3.7l8.4 6.9V19a1.5 1.5 0 0 1-1.5 1.5h-4v-6h-5.8v6h-4A1.5 1.5 0 0 1 3.6 19Z"/>
+      </symbol>
+
+      <!-- Libro abierto -->
+      <symbol id="i-book" viewBox="0 0 24 24">
+        <path d="M12 6.6C10.5 5.1 8.6 4.5 4.2 4.5v12.8c4.4 0 6.3.6 7.8 2.2 1.5-1.6 3.4-2.2 7.8-2.2V4.5c-4.4 0-6.3.6-7.8 2.1Z"/>
+        <path d="M12 6.6v12.9"/>
+      </symbol>
+
+      <!-- Cámara -->
+      <symbol id="i-camera" viewBox="0 0 24 24">
+        <path d="M4 8.6h2.7L8 6.4h8l1.3 2.2H20a1.6 1.6 0 0 1 1.6 1.6v7.8A1.6 1.6 0 0 1 20 19.6H4a1.6 1.6 0 0 1-1.6-1.6v-7.8A1.6 1.6 0 0 1 4 8.6Z"/>
+        <circle cx="12" cy="13.9" r="3.2"/>
+      </symbol>
+
+      <!-- Imagen / placeholder -->
+      <symbol id="i-image" viewBox="0 0 24 24">
+        <rect x="3" y="4.5" width="18" height="15" rx="2.2"/>
+        <circle cx="8.6" cy="10" r="1.7"/>
+        <path d="M21 15.6l-4.6-4.3-8.8 8.2"/>
+      </symbol>
+
+      <!-- Destello -->
+      <symbol id="i-sparkle" viewBox="0 0 24 24">
+        <path d="M10.4 3.2l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4L4.4 9.2l4.4-1.6Z"/>
+        <path d="M18 14.6l.75 2 2 .75-2 .75-.75 2-.75-2-2-.75 2-.75Z"/>
+      </symbol>
+
+      <!-- Reloj -->
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.6"/>
+        <path d="M12 7.4V12l3.4 2"/>
+      </symbol>
+
+      <!-- Fuegos artificiales -->
+      <symbol id="i-firework" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2.6"/>
+        <path d="M12 2.4v3.2M12 18.4v3.2M2.4 12h3.2M18.4 12h3.2M5.2 5.2l2.3 2.3M16.5 16.5l2.3 2.3M18.8 5.2l-2.3 2.3M7.5 16.5l-2.3 2.3"/>
+      </symbol>
+
+      <!-- Luna -->
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M20.6 15.3A9 9 0 0 1 8.7 3.4 8.6 8.6 0 1 0 20.6 15.3Z"/>
+        <path d="M17.6 4.2l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6Z"/>
+      </symbol>
+
+      <!-- Sol -->
+      <symbol id="i-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.8v2.2M12 19v2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M2.8 12H5M19 12h2.2M4.5 19.5l1.6-1.6M17.9 6.1l1.6-1.6"/>
+      </symbol>
+
+      <!-- Avión de papel (viaje) -->
+      <symbol id="i-plane" viewBox="0 0 24 24">
+        <path d="M21 3.3 3.2 10.6l7 2.9 2.9 7Z"/>
+        <path d="M10.2 13.5 21 3.3"/>
+      </symbol>
+
+      <!-- Dos personas -->
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <circle cx="9.2" cy="8.4" r="3.4"/>
+        <path d="M2.8 20.2c0-3.4 2.9-5.6 6.4-5.6s6.4 2.2 6.4 5.6"/>
+        <path d="M16.6 5.4a3.3 3.3 0 0 1 0 6M18.2 15c2.2.7 3.6 2.5 3.6 5.2"/>
+      </symbol>
+
+      <!-- Regalo -->
+      <symbol id="i-gift" viewBox="0 0 24 24">
+        <path d="M4.4 10.8h15.2v8.4a1.4 1.4 0 0 1-1.4 1.4H5.8a1.4 1.4 0 0 1-1.4-1.4Z"/>
+        <rect x="2.8" y="6.6" width="18.4" height="4.2" rx="1.2"/>
+        <path d="M12 6.6v14M12 6.6S10.9 3.2 8.9 3.2a2.1 2.1 0 0 0 0 3.4ZM12 6.6s1.1-3.4 3.1-3.4a2.1 2.1 0 0 1 0 3.4Z"/>
+      </symbol>
+
+      <!-- Torta de cumpleaños -->
+      <symbol id="i-cake" viewBox="0 0 24 24">
+        <path d="M12 2.6c1 1.1 1 2.4 0 3.1-1-.7-1-2 0-3.1Z"/>
+        <path d="M12 5.7v3.1"/>
+        <path d="M4.8 13.4a2.6 2.6 0 0 1 2.6-2.6h9.2a2.6 2.6 0 0 1 2.6 2.6v6H4.8Z"/>
+        <path d="M4.8 15.4h14.4"/>
+        <path d="M2.9 19.4h18.2"/>
+      </symbol>
+
+      <!-- Chevrons -->
+      <symbol id="i-chevron-left" viewBox="0 0 24 24">
+        <path d="M14.6 5.4 8 12l6.6 6.6"/>
+      </symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24">
+        <path d="M9.4 5.4 16 12l-6.6 6.6"/>
+      </symbol>
+
+      <!-- Flecha abajo (scroll hint) -->
+      <symbol id="i-arrow-down" viewBox="0 0 24 24">
+        <path d="M12 4.6v14.8M6.4 13.8 12 19.4l5.6-5.6"/>
+      </symbol>
+    </defs>
+  </svg>
 
   <!-- Background stars canvas -->
   <canvas id="stars-canvas"></canvas>
@@ -21,10 +141,18 @@
 
   <!-- Navigation -->
   <nav id="main-nav">
-    <a href="#hero" class="nav-link" aria-label="Inicio">🏠</a>
-    <a href="#timeline" class="nav-link" aria-label="Nuestra Historia">📖</a>
-    <a href="#gallery" class="nav-link" aria-label="Fotos">📸</a>
-    <a href="#game" class="nav-link" aria-label="Corazones">💕</a>
+    <a href="#hero" class="nav-link" aria-label="Inicio">
+      <svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>
+    </a>
+    <a href="#timeline" class="nav-link" aria-label="Nuestra Historia">
+      <svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg>
+    </a>
+    <a href="#gallery" class="nav-link" aria-label="Fotos">
+      <svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg>
+    </a>
+    <a href="#game" class="nav-link" aria-label="Corazones">
+      <svg class="icon" aria-hidden="true"><use href="#i-heart"></use></svg>
+    </a>
   </nav>
 
   <!-- ===================== HERO ===================== -->
@@ -32,7 +160,10 @@
     <div class="hero-content">
       <p class="hero-pre animate-fade" style="--delay: 0.2s">Para vos, que sos</p>
       <h1 class="hero-title animate-fade" style="--delay: 0.6s">Mi Vida Entera</h1>
-      <p class="hero-sub animate-fade" style="--delay: 1s">Te amo ❤️</p>
+      <p class="hero-sub animate-fade" style="--delay: 1s">
+        Te amo
+        <svg class="icon icon-inline icon-beat" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
+      </p>
 
       <!-- Live counter -->
       <div class="counter animate-fade" style="--delay: 1.4s">
@@ -62,19 +193,24 @@
     </div>
     <div class="scroll-hint animate-fade" style="--delay: 2s">
       <span>scrolleá</span>
-      <div class="scroll-arrow"></div>
+      <svg class="icon scroll-arrow" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
     </div>
   </section>
 
   <!-- ===================== TIMELINE ===================== -->
   <section id="timeline">
     <h2 class="section-title reveal">Nuestra Historia</h2>
-    <p class="section-subtitle reveal">Cada vez que nos vimos ✨</p>
+    <p class="section-subtitle reveal">
+      <svg class="icon icon-inline" aria-hidden="true"><use href="#i-sparkle"></use></svg>
+      Cada vez que nos vimos
+    </p>
 
     <div class="timeline-container">
 
       <div class="timeline-item reveal" data-side="left">
-        <div class="timeline-dot">🫣</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">7 de junio, 2024</span>
           <h3>La primera vez</h3>
@@ -83,7 +219,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="right">
-        <div class="timeline-dot">💕</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-hearts"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">12 de octubre, 2024</span>
           <h3>Oficial</h3>
@@ -92,7 +230,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="left">
-        <div class="timeline-dot">🎆</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-firework"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">30 de diciembre, 2024</span>
           <h3>Primer Año Nuevo juntos</h3>
@@ -101,7 +241,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="right">
-        <div class="timeline-dot">🏠</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">1 de marzo, 2025</span>
           <h3>Primera vez en Trini</h3>
@@ -110,7 +252,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="left">
-        <div class="timeline-dot">🌙</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-moon"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">5 de abril, 2025</span>
           <h3>Primera noche juntos</h3>
@@ -119,7 +263,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="right">
-        <div class="timeline-dot">❤️</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-sun"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">27 de julio, 2025</span>
           <h3>Otro día juntos</h3>
@@ -128,7 +274,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="left">
-        <div class="timeline-dot">💜</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-plane"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">6 de agosto, 2025</span>
           <h3>Viniste sola</h3>
@@ -137,7 +285,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="right">
-        <div class="timeline-dot">🧡</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-users"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">3 de octubre, 2025</span>
           <h3>Nos volvimos a ver</h3>
@@ -146,7 +296,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="left">
-        <div class="timeline-dot">🎄</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-gift"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">29 de diciembre, 2025</span>
           <h3>Cerrando el año juntos</h3>
@@ -155,7 +307,9 @@
       </div>
 
       <div class="timeline-item reveal" data-side="right">
-        <div class="timeline-dot">🎂</div>
+        <span class="timeline-dot">
+          <svg class="icon" aria-hidden="true"><use href="#i-cake"></use></svg>
+        </span>
         <div class="timeline-card">
           <span class="timeline-date">3 de julio, 2026</span>
           <h3>Tu cumpleaños</h3>
@@ -169,7 +323,10 @@
   <!-- ===================== GALLERY ===================== -->
   <section id="gallery">
     <h2 class="section-title reveal">Nosotros</h2>
-    <p class="section-subtitle reveal">Momentos que guardo en el corazón 📸</p>
+    <p class="section-subtitle reveal">
+      <svg class="icon icon-inline" aria-hidden="true"><use href="#i-camera"></use></svg>
+      Momentos que guardo en el corazón
+    </p>
 
     <div class="carousel reveal">
       <div class="carousel-track" id="carousel-track">
@@ -184,42 +341,46 @@
         <div class="carousel-slide">
           <img src="img/foto-1.jpg" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
           <div class="placeholder-overlay" style="display:none">
-            <span class="placeholder-icon">📸</span>
+            <svg class="icon placeholder-icon" aria-hidden="true"><use href="#i-image"></use></svg>
             <span class="placeholder-text">Foto 1</span>
           </div>
         </div>
         <div class="carousel-slide">
           <img src="img/foto-2.jpg" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
           <div class="placeholder-overlay" style="display:none">
-            <span class="placeholder-icon">📸</span>
+            <svg class="icon placeholder-icon" aria-hidden="true"><use href="#i-image"></use></svg>
             <span class="placeholder-text">Foto 2</span>
           </div>
         </div>
         <div class="carousel-slide">
-          <img src="img/foto-3.jpg" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <img src="img/foto-3.png" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
           <div class="placeholder-overlay" style="display:none">
-            <span class="placeholder-icon">📸</span>
+            <svg class="icon placeholder-icon" aria-hidden="true"><use href="#i-image"></use></svg>
             <span class="placeholder-text">Foto 3</span>
           </div>
         </div>
         <div class="carousel-slide">
-          <img src="img/foto-4.jpg" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <img src="img/foto-4.png" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
           <div class="placeholder-overlay" style="display:none">
-            <span class="placeholder-icon">📸</span>
+            <svg class="icon placeholder-icon" aria-hidden="true"><use href="#i-image"></use></svg>
             <span class="placeholder-text">Foto 4</span>
           </div>
         </div>
         <div class="carousel-slide">
-          <img src="img/foto-5.jpg" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <img src="img/foto-5.png" alt="Nosotros" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
           <div class="placeholder-overlay" style="display:none">
-            <span class="placeholder-icon">📸</span>
+            <svg class="icon placeholder-icon" aria-hidden="true"><use href="#i-image"></use></svg>
             <span class="placeholder-text">Foto 5</span>
           </div>
         </div>
       </div>
 
-      <button class="carousel-btn carousel-btn-prev" id="carousel-prev" aria-label="Foto anterior">‹</button>
-      <button class="carousel-btn carousel-btn-next" id="carousel-next" aria-label="Foto siguiente">›</button>
+      <button class="carousel-btn carousel-btn-prev" id="carousel-prev" aria-label="Foto anterior">
+        <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next" id="carousel-next" aria-label="Foto siguiente">
+        <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+      </button>
 
       <div class="carousel-dots" id="carousel-dots">
         <button class="dot active" data-index="0" aria-label="Ir a foto 1"></button>
@@ -234,33 +395,36 @@
   <!-- ===================== INTERACTIVE GAME ===================== -->
   <section id="game">
     <h2 class="section-title reveal">Tocá los corazones</h2>
-    <p class="section-subtitle reveal">Cada uno esconde algo para vos 💕</p>
+    <p class="section-subtitle reveal">
+      <svg class="icon icon-inline" aria-hidden="true"><use href="#i-hearts"></use></svg>
+      Cada uno esconde algo para vos
+    </p>
     <p class="game-counter reveal"><span id="hearts-found">0</span> / 8</p>
 
     <div class="hearts-grid reveal" id="hearts-grid">
       <button class="heart-bubble" data-msg="Sos lo mejor que me pasó en la vida" aria-label="Corazón 1">
-        <span class="heart-emoji">💖</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Me hacés sonreír todos los días" aria-label="Corazón 2">
-        <span class="heart-emoji">💗</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Cada día te quiero un poco más" aria-label="Corazón 3">
-        <span class="heart-emoji">💝</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Sos mi persona favorita en el mundo" aria-label="Corazón 4">
-        <span class="heart-emoji">💜</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Gracias por elegirme todos los días" aria-label="Corazón 5">
-        <span class="heart-emoji">🩷</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Te extraño cada segundo que no estamos juntos" aria-label="Corazón 6">
-        <span class="heart-emoji">💕</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Sos mi lugar seguro, mi hogar" aria-label="Corazón 7">
-        <span class="heart-emoji">🩵</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
       <button class="heart-bubble" data-msg="Te amo infinitamente ∞" aria-label="Corazón 8">
-        <span class="heart-emoji">❤️‍🔥</span>
+        <svg class="icon heart-icon" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
       </button>
     </div>
 
@@ -270,7 +434,7 @@
     <!-- Final reveal when all hearts are popped -->
     <div class="final-reveal" id="final-reveal">
       <div class="final-text">
-        <span class="final-heart">❤️</span>
+        <svg class="icon final-heart" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
         <h2>TE AMO</h2>
         <p>Hoy, mañana y siempre</p>
       </div>
@@ -279,7 +443,11 @@
 
   <!-- ===================== FOOTER ===================== -->
   <footer id="footer">
-    <p class="footer-text">Hecho con ❤️ para vos</p>
+    <p class="footer-text">
+      Hecho con
+      <svg class="icon icon-inline icon-beat" aria-hidden="true"><use href="#i-heart-solid"></use></svg>
+      para vos
+    </p>
     <p class="footer-year">2024 — ∞</p>
   </footer>
 

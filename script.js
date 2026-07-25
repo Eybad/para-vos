@@ -69,18 +69,39 @@ function initStars() {
 }
 
 /* ========================================
+   ICON HELPER — crea un <svg><use href="#id"></svg>
+   ======================================== */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const XLINK_NS = 'http://www.w3.org/1999/xlink';
+
+function createIcon(id, className) {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'icon ' + (className || ''));
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+
+  const use = document.createElementNS(SVG_NS, 'use');
+  use.setAttribute('href', '#' + id);
+  use.setAttributeNS(XLINK_NS, 'xlink:href', '#' + id);
+
+  svg.appendChild(use);
+  return svg;
+}
+
+/* ========================================
    FLOATING HEARTS
    ======================================== */
 function initFloatingHearts() {
   const container = document.getElementById('floating-hearts');
   if (!container) return;
 
-  const hearts = ['💕', '❤️', '💜', '🩷', '💗'];
+  const icons = ['i-heart-solid', 'i-heart', 'i-hearts', 'i-sparkle'];
+  const colors = ['#ff6b9d', '#c44dff', '#a855f7', '#f9a8d4', '#e8448a'];
 
   function spawnHeart() {
-    const el = document.createElement('span');
-    el.className = 'float-heart';
-    el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    const icon = icons[Math.floor(Math.random() * icons.length)];
+    const el = createIcon(icon, 'float-heart');
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
     el.style.left = Math.random() * 100 + '%';
     el.style.animationDuration = (Math.random() * 8 + 10) + 's';
     el.style.fontSize = (Math.random() * 0.8 + 0.8) + 'rem';
@@ -243,11 +264,12 @@ function initHeartGame() {
   });
 
   function spawnParticles(cx, cy) {
-    const hearts = ['💖', '💗', '✨', '💕', '🩷', '💜'];
+    const icons = ['i-heart-solid', 'i-sparkle', 'i-hearts'];
+    const colors = ['#ff6b9d', '#f9a8d4', '#c44dff', '#f5c542', '#67e8f9', '#e8448a'];
+
     for (let i = 0; i < 12; i++) {
-      const p = document.createElement('span');
-      p.className = 'heart-particle';
-      p.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      const p = createIcon(icons[Math.floor(Math.random() * icons.length)], 'heart-particle');
+      p.style.color = colors[Math.floor(Math.random() * colors.length)];
 
       const angle = (Math.PI * 2 * i) / 12;
       const dist = 60 + Math.random() * 60;
