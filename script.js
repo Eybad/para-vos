@@ -22,20 +22,33 @@ function initStars() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   let stars = [];
+  let width = 0;
+  let height = 0;
   const STAR_COUNT = 200;
 
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    /* Sin escalar por densidad de pantalla las estrellas se veian
+       borrosas en celulares (DPR 2.5-3). Se topea en 2 para no dibujar
+       9x mas pixeles. */
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function createStars() {
     stars = [];
     for (let i = 0; i < STAR_COUNT; i++) {
       stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * width,
+        y: Math.random() * height,
         radius: Math.random() * 1.5 + 0.3,
         alpha: Math.random(),
         alphaSpeed: Math.random() * 0.008 + 0.002,
@@ -45,27 +58,41 @@ function initStars() {
   }
 
   function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, width, height);
     for (const s of stars) {
-      s.alpha += s.alphaSpeed * s.alphaDir;
-      if (s.alpha >= 1) { s.alpha = 1; s.alphaDir = -1; }
-      if (s.alpha <= 0.1) { s.alpha = 0.1; s.alphaDir = 1; }
+      if (!reduceMotion) {
+        s.alpha += s.alphaSpeed * s.alphaDir;
+        if (s.alpha >= 1) { s.alpha = 1; s.alphaDir = -1; }
+        if (s.alpha <= 0.1) { s.alpha = 0.1; s.alphaDir = 1; }
+      }
 
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(240, 230, 255, ${s.alpha})`;
       ctx.fill();
     }
-    requestAnimationFrame(draw);
+    if (!reduceMotion) requestAnimationFrame(draw);
   }
 
   resize();
   createStars();
   draw();
 
+  /* En mobile, mostrar u ocultar la barra de direcciones dispara resize
+     todo el tiempo. Antes se regeneraban las 200 estrellas en cada uno,
+     asi que el cielo "saltaba" al scrollear. Solo se regeneran si cambia
+     el ancho. */
+  let lastWidth = window.innerWidth;
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    resize();
-    createStars();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const widthChanged = window.innerWidth !== lastWidth;
+      lastWidth = window.innerWidth;
+      resize();
+      if (widthChanged) createStars();
+      if (reduceMotion) draw();
+    }, 150);
   });
 }
 
@@ -95,6 +122,10 @@ function createIcon(id, className) {
 function initFloatingHearts() {
   const container = document.getElementById('floating-hearts');
   if (!container) return;
+
+  /* Con movimiento reducido el CSS los oculta: no tiene sentido seguir
+     creando y descartando elementos cada 3 segundos. */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const icons = ['i-heart-solid', 'i-heart', 'i-hearts', 'i-sparkle'];
   const colors = ['#ff6b9d', '#c44dff', '#a855f7', '#f9a8d4', '#e8448a'];
@@ -183,12 +214,32 @@ function initCarousel() {
     });
   }
 
-  if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
-  if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+  /* Toda interaccion manual reinicia el temporizador: antes el autoplay
+     podia disparar justo despues de un toque y la foto cambiaba dos veces
+     seguidas. */
+  let autoplay = null;
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplay = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  function stopAutoplay() {
+    if (autoplay) clearInterval(autoplay);
+    autoplay = null;
+  }
+
+  function goToManual(index) {
+    goTo(index);
+    startAutoplay();
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', () => goToManual(current - 1));
+  if (nextBtn) nextBtn.addEventListener('click', () => goToManual(current + 1));
 
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
-      goTo(parseInt(dot.dataset.index, 10));
+      goToManual(parseInt(dot.dataset.index, 10));
     });
   });
 
@@ -198,6 +249,9 @@ function initCarousel() {
 
   track.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
+    /* El comentario original decia "pausa en hover/touch" pero el touch
+       nunca pausaba: el autoplay competia con el gesto del dedo. */
+    stopAutoplay();
   }, { passive: true });
 
   track.addEventListener('touchend', (e) => {
@@ -206,21 +260,30 @@ function initCarousel() {
     if (Math.abs(diff) > 50) {
       goTo(diff > 0 ? current + 1 : current - 1);
     }
+    startAutoplay();
   }, { passive: true });
 
-  /* Auto-advance every 5s */
-  let autoplay = setInterval(() => goTo(current + 1), 5000);
+  track.addEventListener('mouseenter', stopAutoplay);
+  track.addEventListener('mouseleave', startAutoplay);
 
-  /* Pause on hover/touch */
-  track.addEventListener('mouseenter', () => clearInterval(autoplay));
-  track.addEventListener('mouseleave', () => {
-    autoplay = setInterval(() => goTo(current + 1), 5000);
-  });
+  /* Solo se responde a las flechas si el carrusel esta a la vista: antes
+     el listener era global y las flechas movian fotos invisibles desde
+     cualquier parte de la pagina. */
+  let inView = false;
+  const carousel = track.closest('.carousel') || track;
 
-  /* Keyboard */
+  new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      inView = entry.isIntersecting;
+      if (inView) startAutoplay();
+      else stopAutoplay();
+    });
+  }, { threshold: 0.35 }).observe(carousel);
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') goTo(current - 1);
-    if (e.key === 'ArrowRight') goTo(current + 1);
+    if (!inView) return;
+    if (e.key === 'ArrowLeft') goToManual(current - 1);
+    if (e.key === 'ArrowRight') goToManual(current + 1);
   });
 }
 
@@ -252,17 +315,30 @@ function initHeartGame() {
     found++;
     if (counterEl) counterEl.textContent = found;
 
+    /* El corazon reventado sale del orden de tabulacion y del arbol de
+       accesibilidad: quedaba enfocable con la escala en 0 */
+    bubble.disabled = true;
+    bubble.setAttribute('aria-hidden', 'true');
+
     /* Show message */
-    const msg = bubble.dataset.msg;
-    if (messageEl && msg) {
-      messageEl.innerHTML = `<div class="message-card">"${msg}"</div>`;
-    }
+    showMessage(bubble.dataset.msg);
 
     /* Check if all hearts popped */
     if (found === total) {
       setTimeout(() => showFinalReveal(), 1500);
     }
   });
+
+  /* En mobile el mensaje es un aviso fijo arriba de la nav (ver CSS): se
+     muestra con clase y se esconde solo, para no dejar frases viejas. */
+  let msgTimer;
+  function showMessage(msg) {
+    if (!messageEl || !msg) return;
+    messageEl.innerHTML = '<div class="message-card">' + '\u201C' + msg + '\u201D' + '</div>';
+    messageEl.classList.add('is-visible');
+    clearTimeout(msgTimer);
+    msgTimer = setTimeout(() => messageEl.classList.remove('is-visible'), 5500);
+  }
 
   function spawnParticles(cx, cy) {
     const icons = ['i-heart-solid', 'i-sparkle', 'i-hearts'];
